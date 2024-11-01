@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { ListBox } from './components/main/ListBox';
+import { Box } from './components/main/Box';
 import { Main } from './components/main/Main';
 import { MovieList } from './components/main/MovieList';
-import { WatchedBox } from './components/main/WatchedBox';
+import { WatchedMoviesList } from './components/main/WatchedMoviesList';
+import { WatchedSummary } from './components/main/WatchedSummary';
 import { Navigation } from './components/navigation/Navigation';
 import { NumResults } from './components/navigation/NumResults';
 import { Search } from './components/navigation/Search';
@@ -56,6 +57,7 @@ const tempWatchedData = [
 
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
+  const [watched, setWatched] = useState(tempWatchedData);
 
   return (
     <>
@@ -65,11 +67,14 @@ export default function App() {
       </Navigation>
 
       <Main>
-        <ListBox>
+        <Box>
           <MovieList movies={movies} />
-        </ListBox>
+        </Box>
 
-        <WatchedBox tempWatchedData={tempWatchedData} />
+        <Box>
+          <WatchedSummary watched={watched} />
+          <WatchedMoviesList watched={watched} />
+        </Box>
       </Main>
     </>
   );
