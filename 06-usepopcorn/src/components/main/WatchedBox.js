@@ -3,7 +3,7 @@ import { Button } from './Button';
 import { WatchedMoviesList } from './WatchedMoviesList';
 import { WatchedSummary } from './WatchedSummary';
 
-export function WatchedBox({ average, tempWatchedData }) {
+export function WatchedBox({ tempWatchedData }) {
   const [isOpen2, setIsOpen2] = useState(true);
   const [watched, setWatched] = useState(tempWatchedData);
 
@@ -15,10 +15,7 @@ export function WatchedBox({ average, tempWatchedData }) {
       />
       {isOpen2 && (
         <>
-          <WatchedSummary
-            watched={watched}
-            average={average}
-          />
+          <WatchedSummary watched={watched} />
           <WatchedMoviesList watched={watched} />
         </>
       )}
