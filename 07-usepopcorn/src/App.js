@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Box } from './components/main/Box';
 import { Main } from './components/main/Main';
+// import { Movie } from './components/main/Movie';
+import { ErrorMessage } from './components/main/ErrorMessage';
+import { Loader } from './components/main/Loader';
+import { MovieDetails } from './components/main/MovieDetails';
 import { MovieList } from './components/main/MovieList';
 import { WatchedMoviesList } from './components/main/WatchedMoviesList';
 import { WatchedSummary } from './components/main/WatchedSummary';
 import { Navigation } from './components/navigation/Navigation';
 import { NumResults } from './components/navigation/NumResults';
 import { Search } from './components/navigation/Search';
-import { is } from 'C:/Users/Dennis/AppData/Local/Microsoft/TypeScript/5.6/node_modules/@babel/types/lib/index';
 
 const tempMovieData = [
   {
@@ -58,16 +61,26 @@ const tempWatchedData = [
 const KEY = '75bd4290';
 
 export default function App() {
+  const [query, setQuery] = useState('');
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const query = 'detective%20conan';
+  const [selectedId, setSelectedId] = useState(null);
+
+  function handleSelectMovie(id) {
+    setSelectedId((selectedId) => (id === selectedId ? null : id));
+  }
+
+  function handleCloseMovie() {
+    setSelectedId(null);
+  }
 
   useEffect(() => {
     async function fetchMovies() {
       try {
         setIsLoading(true);
+        setError('');
         const res = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`);
 
         if (!res.ok) throw new Error('Something went wrong with fetching movies');
@@ -78,47 +91,57 @@ export default function App() {
         setMovies(data.Search);
       } catch (err) {
         if (err) {
-          console.log(err.message);
           setError(err.message);
         }
       } finally {
         setIsLoading(false);
       }
     }
+    if (query.length < 3) {
+      setMovies([]);
+      setError('');
+      return;
+    }
     fetchMovies();
-  }, []);
+  }, [query]);
 
   return (
     <>
       <Navigation>
-        <Search />
+        <Search
+          query={query}
+          setQuery={setQuery}
+        />
         <NumResults movies={movies} />
       </Navigation>
 
       <Main>
         <Box>
           {isLoading && <Loader />}
-          {!isLoading && !error && <MovieList movies={movies} />}
+          {!isLoading && !error && (
+            <MovieList
+              movies={movies}
+              onSelectMovie={handleSelectMovie}
+            />
+          )}
           {error && <ErrorMessage message={error} />}
         </Box>
 
         <Box>
-          <WatchedSummary watched={watched} />
-          <WatchedMoviesList watched={watched} />
+          {selectedId ? (
+            <MovieDetails
+              selectedId={selectedId}
+              onCloseMovie={handleCloseMovie}
+              KEY={KEY}
+            />
+          ) : (
+            <>
+              <WatchedSummary watched={watched} />
+              <WatchedMoviesList watched={watched} />
+            </>
+          )}
         </Box>
       </Main>
     </>
-  );
-}
-
-function Loader() {
-  return <p className="loader">Loading...</p>;
-}
-
-function ErrorMessage({ message }) {
-  return (
-    <p className="error">
-      <span>⛔️</span> {message}
-    </p>
   );
 }
