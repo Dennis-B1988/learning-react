@@ -46,6 +46,30 @@ export function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched, 
     getMovieDetails();
   }, [KEY, selectedId]);
 
+  useEffect(() => {
+    if (!title) return;
+    document.title = `Movie | ${title}`;
+    return function cleanup() {
+      document.title = 'usePopcorn';
+    };
+  }, [title]);
+
+  useEffect(() => {
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        onCloseMovie();
+      }
+    });
+
+    return function cleanup() {
+      document.removeEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          onCloseMovie();
+        }
+      });
+    };
+  }, [onCloseMovie]);
+
   return (
     <div className="details">
       {isLoading ? (
