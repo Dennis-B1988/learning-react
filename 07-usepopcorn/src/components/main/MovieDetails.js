@@ -2,9 +2,13 @@ import { useEffect, useState } from 'react';
 import { Loader } from './Loader';
 import { StarRating } from './StarRating';
 
-export function MovieDetails({ selectedId, onCloseMovie, KEY }) {
+export function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched, KEY }) {
   const [movie, setMovie] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [userRating, setUserRating] = useState('');
+
+  const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
+  const watchedUserRating = watched.find((movie) => movie.imdbID === selectedId)?.userRating;
 
   const {
     Title: title,
@@ -17,6 +21,19 @@ export function MovieDetails({ selectedId, onCloseMovie, KEY }) {
     Director: director,
     Genre: genre,
   } = movie || {};
+
+  function handleAdd() {
+    const newWatchedMovie = {
+      imdbID: selectedId,
+      title,
+      poster,
+      imdbRating: Number(imdbRating),
+      runtime: Number(runtime.split(' ').at(0)),
+      userRating,
+    };
+    onAddWatched(newWatchedMovie);
+    onCloseMovie();
+  }
 
   useEffect(() => {
     async function getMovieDetails() {
@@ -60,10 +77,27 @@ export function MovieDetails({ selectedId, onCloseMovie, KEY }) {
 
           <section>
             <div className="rating">
-              <StarRating
-                maxRating={10}
-                size={24}
-              />
+              {!isWatched ? (
+                <>
+                  <StarRating
+                    maxRating={10}
+                    size={24}
+                    onSetRating={setUserRating}
+                  />
+                  {Number(userRating) > 0 && (
+                    <button
+                      className="btn-add"
+                      onClick={handleAdd}
+                    >
+                      + Watched
+                    </button>
+                  )}
+                </>
+              ) : (
+                <p>
+                  You rated this movie with {watchedUserRating} <span>⭐️</span>
+                </p>
+              )}
             </div>
             <h3>Plot</h3>
             <p>{plot}</p>
