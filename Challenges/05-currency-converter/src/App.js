@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import { is } from 'C:/Users/Dennis/AppData/Local/Microsoft/TypeScript/5.6/node_modules/@babel/types/lib/index';
 
 function App() {
   const [fromCurrency, setFromCurrency] = useState('EUR');
