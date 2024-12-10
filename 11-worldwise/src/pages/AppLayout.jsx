@@ -1,12 +1,11 @@
+import AppNav from '../components/AppNav';
 import PageNav from '../components/PageNav';
 
-function Product() {
+export default function AppLayout() {
   return (
     <div>
+      <AppNav />
       <PageNav />
-      <h1>Product</h1>
     </div>
   );
 }
-
-export default Product;
