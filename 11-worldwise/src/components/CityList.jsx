@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import CityItem from './CityItem';
 import styles from './CityList.module.css';
 import Message from './Message';
@@ -21,14 +20,5 @@ function CityList({ cities, isLoading }) {
     </ul>
   );
 }
-
-CityList.propTypes = {
-  cities: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-  isLoading: PropTypes.bool.isRequired,
-};
 
 export default CityList;
