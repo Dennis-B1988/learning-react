@@ -25,8 +25,8 @@ function CountryList() {
 
   return (
     <ul className={styles.countryList}>
-      {cities.map((country) => (
-        <CountryItem country={country} key={country.country} />
+      {countries.map((country) => (
+        <CountryItem country={country} key={country.id} />
       ))}
     </ul>
   );

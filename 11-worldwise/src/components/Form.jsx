@@ -11,7 +11,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useNavigate } from 'react-router-dom';
 import { useCities } from '../hooks/useCities';
 
-export function convertToEmoji(countryCode) {
+function convertToEmoji(countryCode) {
   const codePoints = countryCode
     .toUpperCase()
     .split('')
@@ -66,6 +66,10 @@ function Form() {
     navigate('/app/cities');
   }
 
+  function handleDateChange(newDate) {
+    setDate(newDate);
+  }
+
   if (isLoadingGeocoding) return <Spinner />;
 
   if (!lat && !lng) return <Message message="Start by clicking somewhere on the map" />;
@@ -82,7 +86,7 @@ function Form() {
 
       <div className={styles.row}>
         <label htmlFor="date">When did you go to {cityName}?</label>
-        <DatePicker id="date" onChange={(date) => setDate(date)} selected={date} dateFormat={'dd.MM.yyyy'} />
+        <DatePicker id="date" selected={date} dateFormat={'dd.MM.yyyy'} onChange={handleDateChange} />
       </div>
 
       <div className={styles.row}>
