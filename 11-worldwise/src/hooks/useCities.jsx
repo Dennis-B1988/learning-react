@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { CitiesContext } from '../contexts/CitiesProvider';
+import { CitiesContext } from '../contexts/CitiesContext';
 
 function useCities() {
   const context = useContext(CitiesContext);
