@@ -1,8 +1,4 @@
-import { useQuiz } from '../hooks/useQuiz';
-
-function Options({ question, index, option }) {
-  const { dispatch, answer } = useQuiz();
-
+function Options({ option, dispatch, answer, question, index }) {
   const hasAnswered = answer !== null;
   const answerStatus = index === question.correctOption ? 'correct' : 'wrong';
 

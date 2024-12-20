@@ -1,19 +1,16 @@
+import { useQuiz } from '../hooks/useQuiz';
 import Options from './Options';
 
-function Question({ question, dispatch, answer }) {
+function Question() {
+  const { questions, index } = useQuiz();
+  const question = questions.at(index);
+
   return (
     <div>
       <h4>{question.question}</h4>
       <div className="options">
         {question.options.map((option, index) => (
-          <Options
-            key={index}
-            option={option}
-            dispatch={dispatch}
-            answer={answer}
-            question={question}
-            index={index}
-          />
+          <Options question={question} option={option} index={index} />
         ))}
       </div>
     </div>
