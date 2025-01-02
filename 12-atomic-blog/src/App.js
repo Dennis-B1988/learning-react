@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { PostProvider, usePosts } from './PostProvider';
 
 function createRandomPost() {
@@ -65,14 +65,14 @@ function Results() {
   return <p>🚀 {posts.length} atomic posts found</p>;
 }
 
-function Main() {
+const Main = memo(function Main() {
   return (
     <main>
       <FormAddPost />
       <Posts />
     </main>
   );
-}
+});
 
 function Posts() {
   return (
@@ -134,7 +134,9 @@ function Archive() {
   return (
     <aside>
       <h2>Post archive</h2>
-      <button onClick={() => setShowArchive((s) => !s)}>{showArchive ? 'Hide archive posts' : 'Show archive posts'}</button>
+      <button onClick={() => setShowArchive((s) => !s)}>
+        {showArchive ? 'Hide archive posts' : 'Show archive posts'}
+      </button>
 
       {showArchive && (
         <ul>
